@@ -13,6 +13,7 @@ app.register(accountRoutes, {prefix: '/accounts'});
 const start = async() => {
     try {
         await app.listen({port: 3000});
+        console.log(process.env.DB);
         console.log('Server running at https://localhost:3000');
     } catch (err) {
         app.log.error(err);
