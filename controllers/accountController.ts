@@ -1,15 +1,10 @@
-import { FastifyRequest, FastifyReply } from "fastify";
-import { listAccounts as list } from "../services/sfdcAccounts";
+import { listAccounts as list} from "../services/sfdcAccounts";
 
-export default async function listAccounts (req: FastifyRequest, res: FastifyReply) {
+export async function listAccounts(req, res) {
+    const { sessionId, serverUrl } = req.body;
 
-    const { sessionId, serverUrl } = req.body as {sessionId: string, serverUrl: string};
     const context = {sessionId, serverUrl};
+    const accounts = await list(context);
 
-    try {
-        const accounts = await list(context);
-        return res.send(accounts);
-    } catch (err) {
-        return res.status(500).send({error: 'Failed to retrieve accounts'});
-    }
+    return res.send(accounts);
 }
