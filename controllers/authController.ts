@@ -1,4 +1,5 @@
 import { Client, Pool } from "pg";
+import { FastifyRequest, FastifyReply } from "fastify";
 import soap from "soap";
 import {config} from "dotenv";
 config();
@@ -7,7 +8,12 @@ const pool = new Pool({
     connectionString: process.env.DATABASE_URL
 })
 
-export async function login(req, res) {
+interface authReqBody {
+    username: string;
+    password: string;
+}
+
+export async function login(req:FastifyRequest<{ Body: authReqBody }>, res:FastifyReply) {
     const { username, password } = req.body;
     const userQuery = 'SELECT * from users WHERE username = $1 AND password = $2';
 
@@ -32,7 +38,7 @@ export async function login(req, res) {
     return res.send({sessionId, serverUrl});
 }
 
-export async function register (req, res) {
+export async function register (req:FastifyRequest<{Body: authReqBody}>, res:FastifyReply) {
     const { username, password } = req.body;
     const insertQuery = 'INSERT INTO users (username, password) VALUES ($1, $2)';
 
