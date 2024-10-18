@@ -11,6 +11,8 @@
     "@types/node-fetch": "^2.6.11",
     "@types/pg": "^8.11.10",
     "@types/soap": "^0.21.0",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   }
 }
