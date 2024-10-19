@@ -1,7 +1,7 @@
 import { listContacts as list } from "../services/sfdcContacts";
 import { FastifyRequest, FastifyReply } from "fastify";
 
-export interface ContactRequestBody {
+interface ContactRequestBody {
     sessionId: string;
     serverUrl: string;
 }
