@@ -12,7 +12,7 @@ export async function createAccounts(context: Context, accountData: any) {
             '${accountData.BillingCity}',
             '${accountData.BillingState}',
             '${accountData.BillingPostalCode}',
-            '${accountData.Website}')
+            '${accountData.Website}') RETURNING *
          `);
 }
 
@@ -24,10 +24,10 @@ export async function updateAccounts(context: Context, accountData: any, account
             BillingState = '${accountData.BillingState}', 
             BillingPostalCode = '${accountData.BillingPostalCode}', 
             Website = '${accountData.Website}'
-            WHERE Id = '${accountId}'
+            WHERE Id = '${accountId}' RETURNING *
         `);
 }
 
 export async function deleteAccounts(context: Context, accountId: string) {
-    return await query(context, `DELETE FROM Accounts WHERE Id = '${accountId}'`);
+    return await query(context, `DELETE FROM Accounts WHERE Id = '${accountId}' RETURNING *`);
 }

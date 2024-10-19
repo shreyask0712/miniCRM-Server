@@ -11,7 +11,7 @@ export async function createOpportunities(context: Context, opportunityData: any
                 '${opportunityData.StageName}',
                 '${opportunityData.Amount}',
                 '${opportunityData.AccountId}'
-            )
+            ) RETURNING *
         `);
 }
 
@@ -21,10 +21,10 @@ export async function updateOpportunities(context: Context, opportunityData: any
             StageName = '${opportunityData.StageName}',
             Amount = '${opportunityData.Amount}',
             AccountId = '${opportunityData.accountId}'
-            WHERE Id = '${opportunityId}'
+            WHERE Id = '${opportunityId}' RETURNING *
         `);
 }
 
 export async function deleteOpportunity(context: Context, opportunityId: string) {
-    return await query(context, `DELETE FROM Opportunity WHERE Id = '${opportunityId}'`)
+    return await query(context, `DELETE FROM Opportunity WHERE Id = '${opportunityId}' RETURNING *`)
 }

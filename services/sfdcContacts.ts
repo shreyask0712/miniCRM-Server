@@ -5,7 +5,7 @@ export async function listContacts(context: Context) {
 }
 
 export async function createContacts(context: Context, contactData: any) {
-    return await query(context, `INSERT INTO Contacts (FirstName, LastName, Email)  VALUES ('${contactData.FirstName}','${contactData.LastName}', '${contactData.Email}')`);
+    return await query(context, `INSERT INTO Contacts (FirstName, LastName, Email)  VALUES ('${contactData.FirstName}','${contactData.LastName}', '${contactData.Email}') RETURNING *`);
 }
 
 export async function updateContacts(context: Context, contactData: any, contactId: string) {
@@ -13,10 +13,10 @@ export async function updateContacts(context: Context, contactData: any, contact
             FirstName = '${contactData.FirstName}',
             LastName = '${contactData.LastName}',
             Email = '${contactData.Email}',
-            WHERE Id = '${contactId}'
+            WHERE Id = '${contactId}' RETURNING *
         `);
 }
 
 export async function deleteContacts(context: Context, contactId: string) {
-    return await query(context, `DELETE FROM Contacts WHERE Id = '${contactId}'`);
+    return await query(context, `DELETE FROM Contacts WHERE Id = '${contactId}' RETURNING *`);
 }
