@@ -1,6 +1,6 @@
 import { Client, Pool } from "pg";
 import { FastifyRequest, FastifyReply } from "fastify";
-import soap from "soap";
+import * as soap from "soap";
 import bcrypt from "bcrypt";  
 import { config } from "dotenv";
 config();
@@ -42,18 +42,34 @@ export async function login(req: FastifyRequest<{ Body: authReqBody }>, res: Fas
         }
 
 
-        const wsdlUrl = './salesforce-partner.wsdl.xml';
+        const wsdlUrl = 'C:\\Users\\shrey\\Documents\\GitHub\\miniCRM-Server\\services\\salesforce-partner.wsdl.xml';
         const soapClient = await soap.createClientAsync(wsdlUrl);
+
+        /*console.log("Logging credentials:", {
+            username: process.env.SALESFORCE_USERNAME,
+            password: `${process.env.SALESFORCE_PASSWORD}${process.env.SALESFORCE_TOKEN}`
+        });*/
 
         const loginResult = await soapClient.loginAsync({
             username: process.env.SALESFORCE_USERNAME,
             password: `${process.env.SALESFORCE_PASSWORD}${process.env.SALESFORCE_TOKEN}`
         });
 
-        const sessionId = loginResult.sessionId;
-        const serverUrl = loginResult.serverUrl;
+        const result = loginResult[0]?.result;
+
+        if (!result) {
+            return res.status(500).send({ error: 'Login result is undefined' });
+        }
+
+        const sessionId = result.sessionId;
+        const serverUrl = result.serverUrl;
+
+        if (!sessionId || !serverUrl) {
+            return res.status(500).send({ error: 'Session ID or server URL not returned from login' });
+        }
 
         return res.send({ sessionId, serverUrl });
+        
     } finally {
         client.release();
     }
