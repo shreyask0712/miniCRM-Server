@@ -1,6 +1,8 @@
 import fastify from "fastify";
 import authRoutes from "./routes/auth";
 import accountRoutes from "./routes/accounts";
+import contactRoutes from "./routes/contacts";
+import opportunityRoutes from "./routes/opportunity";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -9,6 +11,8 @@ const app = fastify({logger:true});
 
 app.register(authRoutes, {prefix: '/auth'});
 app.register(accountRoutes, {prefix: '/accounts'});
+app.register(contactRoutes, {prefix: '/contacts'});
+app.register(opportunityRoutes, {prefix: '/opportunity'})
 
 const start = async() => {
     try {
