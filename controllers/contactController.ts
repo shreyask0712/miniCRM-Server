@@ -40,7 +40,8 @@ export async function createContacts(req: FastifyRequest<{Body: ContactRequestBo
 }
 
 export async function updateContacts(req: FastifyRequest<{Body: ContactData & {id: string} & ContactRequestBody}>, res: FastifyReply) {
-    const {sessionId, serverUrl, id, ...ContactData} = req.body;
+    const {sessionId, serverUrl, ...ContactData} = req.body;
+    const id = req.body.id;
     const context = {sessionId, serverUrl};
 
     try {
@@ -52,7 +53,8 @@ export async function updateContacts(req: FastifyRequest<{Body: ContactData & {i
 }
 
 export async function deleteContacts(req: FastifyRequest<{Body: ContactRequestBody & {id: string}}>, res: FastifyReply) {
-    const {sessionId, serverUrl, id} = req.body;
+    const {sessionId, serverUrl} = req.body;
+    const id= req.body.id;
     const context = {sessionId, serverUrl};
 
     try {

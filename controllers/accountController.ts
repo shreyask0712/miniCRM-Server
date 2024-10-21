@@ -45,7 +45,8 @@ export async function createAccount(req: FastifyRequest<{Body: AccountRequestBod
 }
 
 export async function updateAccount(req: FastifyRequest<{ Body: AccountRequestBody & { id: string } & AccountData }>, res: FastifyReply) {
-    const { sessionId, serverUrl, id, ...accountData } = req.body;
+    const { sessionId, serverUrl, ...accountData } = req.body;
+    const id = req.body.id;
     const context = { sessionId, serverUrl };
 
     try {
@@ -57,7 +58,8 @@ export async function updateAccount(req: FastifyRequest<{ Body: AccountRequestBo
 }
 
 export async function deleteAccount(req: FastifyRequest<{Body: AccountRequestBody & {id: string}}>, res: FastifyReply) {
-    const {sessionId, serverUrl, id} = req.body;
+    const {sessionId, serverUrl} = req.body;
+    const id = req.body.id;
     const context = {sessionId, serverUrl};
 
     try {

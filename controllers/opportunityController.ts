@@ -33,7 +33,8 @@ export async function createOpportunities(req: FastifyRequest<{Body: Opportunity
 }
 
 export async function updateOpportunities(req: FastifyRequest<{Body: OpportunityReqBody & {id: string} & OpportunityData}>, res: FastifyReply) {
-    const {sessionId, serverUrl, id, ...OpportunityData} = req.body;
+    const {sessionId, serverUrl, ...OpportunityData} = req.body;
+    const id = req.body.id;
     const context = {sessionId, serverUrl};
 
     try {
@@ -45,7 +46,8 @@ export async function updateOpportunities(req: FastifyRequest<{Body: Opportunity
 }
 
 export async function deleteOpportunity(req: FastifyRequest<{Body: OpportunityReqBody & {id: string}}>, res: FastifyReply) {
-    const {sessionId, serverUrl, id} = req.body;
+    const {sessionId, serverUrl} = req.body;
+    const id = req.body.id;
     const context = {sessionId, serverUrl};
 
     try {

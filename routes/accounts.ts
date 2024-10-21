@@ -4,7 +4,7 @@ import {listAccounts, createAccount, updateAccount, deleteAccount} from "../cont
 export default async function accountRoutes(fastify: FastifyInstance) {
     fastify.post('/list', listAccounts);
     fastify.post('/create', createAccount);
-    fastify.post('/update/:id', updateAccount);
-    fastify.post('/delete/:id', deleteAccount);
+    fastify.post('/update', updateAccount);
+    fastify.post('/delete', deleteAccount);
 }
 
