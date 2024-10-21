@@ -16,6 +16,10 @@ interface ContactData {
     AccountId: string;
 }
 
+interface ParamsWithId {
+    id: string;
+}
+
 export async function listContacts(req: FastifyRequest<{Body: ContactRequestBody}>, res: FastifyReply) {
     const {sessionId, serverUrl} = req.body;
     const context = {sessionId, serverUrl};
@@ -39,9 +43,9 @@ export async function createContacts(req: FastifyRequest<{Body: ContactRequestBo
     }
 }
 
-export async function updateContacts(req: FastifyRequest<{Body: ContactData & {id: string} & ContactRequestBody}>, res: FastifyReply) {
+export async function updateContacts(req: FastifyRequest<{Body: ContactData & ContactRequestBody,Params: ParamsWithId}>, res: FastifyReply) {
     const {sessionId, serverUrl, ...ContactData} = req.body;
-    const id = req.body.id;
+    const id = req.params.id;
     const context = {sessionId, serverUrl};
 
     try {
@@ -52,9 +56,9 @@ export async function updateContacts(req: FastifyRequest<{Body: ContactData & {i
     }
 }
 
-export async function deleteContacts(req: FastifyRequest<{Body: ContactRequestBody & {id: string}}>, res: FastifyReply) {
+export async function deleteContacts(req: FastifyRequest<{Body: ContactRequestBody,Params: ParamsWithId}>, res: FastifyReply) {
     const {sessionId, serverUrl} = req.body;
-    const id= req.body.id;
+    const id= req.params.id;
     const context = {sessionId, serverUrl};
 
     try {

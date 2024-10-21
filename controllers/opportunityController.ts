@@ -13,6 +13,10 @@ interface OpportunityData {
     AccountId: string;
 }
 
+interface ParamsWithId {
+    id: string;
+}
+
 export async function listOpportunities(req: FastifyRequest<{Body: OpportunityReqBody}>, res: FastifyReply) {
     const {sessionId, serverUrl} = req.body;
     const context = {sessionId, serverUrl};
@@ -32,9 +36,9 @@ export async function createOpportunities(req: FastifyRequest<{Body: Opportunity
     }
 }
 
-export async function updateOpportunities(req: FastifyRequest<{Body: OpportunityReqBody & {id: string} & OpportunityData}>, res: FastifyReply) {
+export async function updateOpportunities(req: FastifyRequest<{Body: OpportunityReqBody & OpportunityData, Params: ParamsWithId}>, res: FastifyReply) {
     const {sessionId, serverUrl, ...OpportunityData} = req.body;
-    const id = req.body.id;
+    const id = req.params.id;
     const context = {sessionId, serverUrl};
 
     try {
@@ -45,9 +49,9 @@ export async function updateOpportunities(req: FastifyRequest<{Body: Opportunity
     }
 }
 
-export async function deleteOpportunity(req: FastifyRequest<{Body: OpportunityReqBody & {id: string}}>, res: FastifyReply) {
+export async function deleteOpportunity(req: FastifyRequest<{Body: OpportunityReqBody,Params: ParamsWithId}>, res: FastifyReply) {
     const {sessionId, serverUrl} = req.body;
-    const id = req.body.id;
+    const id = req.params.id;
     const context = {sessionId, serverUrl};
 
     try {

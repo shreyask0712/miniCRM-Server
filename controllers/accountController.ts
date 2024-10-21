@@ -19,6 +19,10 @@ interface AccountData {
     Website?: string;
 }
 
+interface ParamsWithId {
+    id: string;
+}
+
 export async function listAccounts(req: FastifyRequest<{ Body: AccountRequestBody }>, reply: FastifyReply) {
     const { sessionId, serverUrl } = req.body;
 
@@ -44,9 +48,9 @@ export async function createAccount(req: FastifyRequest<{Body: AccountRequestBod
     }
 }
 
-export async function updateAccount(req: FastifyRequest<{ Body: AccountRequestBody & { id: string } & AccountData }>, res: FastifyReply) {
+export async function updateAccount(req: FastifyRequest<{ Body: AccountRequestBody & AccountData, Params: ParamsWithId  }>, res: FastifyReply) {
     const { sessionId, serverUrl, ...accountData } = req.body;
-    const id = req.body.id;
+    const id = req.params.id;
     const context = { sessionId, serverUrl };
 
     try {
@@ -57,9 +61,9 @@ export async function updateAccount(req: FastifyRequest<{ Body: AccountRequestBo
     }
 }
 
-export async function deleteAccount(req: FastifyRequest<{Body: AccountRequestBody & {id: string}}>, res: FastifyReply) {
+export async function deleteAccount(req: FastifyRequest<{Body: AccountRequestBody,Params: ParamsWithId}>, res: FastifyReply) {
     const {sessionId, serverUrl} = req.body;
-    const id = req.body.id;
+    const id = req.params.id;
     const context = {sessionId, serverUrl};
 
     try {
