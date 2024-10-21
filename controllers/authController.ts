@@ -68,7 +68,7 @@ export async function login(req: FastifyRequest<{ Body: authReqBody }>, res: Fas
             return res.status(500).send({ error: 'Session ID or server URL not returned from login' });
         }
 
-        return res.send({ sessionId, serverUrl });
+        return res.send({ sessionId, serverUrl, username});
         
     } finally {
         client.release();
