@@ -1,9 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { listAccounts as list } from '../services/sfdcAccounts';
-import { createAccounts as create } from '../services/sfdcAccounts';
-import { updateAccounts as update } from '../services/sfdcAccounts';
-import { deleteAccounts as del } from '../services/sfdcAccounts';
-
+import { listAccounts as list, createAccounts as create, updateAccounts as update, deleteAccounts as del } from '../services/sfdcAccounts';
 
 interface AccountRequestBody {
     sessionId: string;
@@ -25,7 +21,6 @@ interface ParamsWithId {
 
 export async function listAccounts(req: FastifyRequest<{ Body: AccountRequestBody }>, reply: FastifyReply) {
     const { sessionId, serverUrl } = req.body;
-
     const context = { sessionId, serverUrl };
 
     try {
@@ -36,40 +31,42 @@ export async function listAccounts(req: FastifyRequest<{ Body: AccountRequestBod
     }
 }
 
-export async function createAccount(req: FastifyRequest<{Body: AccountRequestBody & AccountData}>, res: FastifyReply) {
-    const {sessionId, serverUrl, ...AccountData} = req.body;
-    const context = {sessionId, serverUrl};
+export async function createAccount(req: FastifyRequest<{ Body: AccountRequestBody & AccountData }>, res: FastifyReply) {
+    const { sessionId, serverUrl, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, Website } = req.body;
+    const context = { sessionId, serverUrl };
+    const accountData = { Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, Website };
 
     try {
-        const result = await create(context, AccountData);
-        return res.send(result);
+        const newAccount = await create(context, accountData);
+        return res.send(newAccount);
     } catch (err) {
-        return res.status(500).send({err: 'Failed to create account'});
+        return res.status(500).send({ err: 'Failed to create account' });
     }
 }
 
-export async function updateAccount(req: FastifyRequest<{ Body: AccountRequestBody & AccountData, Params: ParamsWithId  }>, res: FastifyReply) {
-    const { sessionId, serverUrl, ...accountData } = req.body;
-    const id = req.params.id;
+export async function updateAccount(req: FastifyRequest<{ Body: AccountRequestBody & AccountData, Params: ParamsWithId }>, res: FastifyReply) {
+    const { sessionId, serverUrl, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, Website } = req.body;
+    const { id } = req.params;
     const context = { sessionId, serverUrl };
+    const accountData = { Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, Website };
 
     try {
-        const result = await update(context, accountData, id);
-        return res.send(result);
+        const updatedAccount = await update(context, accountData, id);
+        return res.send(updatedAccount);
     } catch (error) {
         return res.status(500).send({ error: 'Failed to update account' });
     }
 }
 
-export async function deleteAccount(req: FastifyRequest<{Body: AccountRequestBody,Params: ParamsWithId}>, res: FastifyReply) {
-    const {sessionId, serverUrl} = req.body;
-    const id = req.params.id;
-    const context = {sessionId, serverUrl};
+export async function deleteAccount(req: FastifyRequest<{ Body: AccountRequestBody, Params: ParamsWithId }>, res: FastifyReply) {
+    const { sessionId, serverUrl } = req.body;
+    const { id } = req.params;
+    const context = { sessionId, serverUrl };
 
     try {
-        const result = await del(context, id);
-        return res.send(result);
+        const deletedAccount = await del(context, id);
+        return res.send({ success: true, statusCode: deletedAccount });
     } catch (err) {
-        return res.status(500).send({err: 'Failed to delete account'});
+        return res.status(500).send({ err: 'Failed to delete account' });
     }
 }

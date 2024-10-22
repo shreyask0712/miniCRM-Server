@@ -7,6 +7,8 @@ export interface HttpReq {
     path: string;
     query?: Record<string, string>;
     headers?: Record<string, string>;
+    body?:string;
+    method?:string;
 }
 
 export interface HttpResp {
@@ -29,7 +31,9 @@ export class Http {
         }
         
         const response = await fetch(url.toString(), {
-            headers: { ...this.config.headers, ...req.headers }
+            headers: { ...this.config.headers, ...req.headers },
+            method: req.method,
+            body: req.body
         });
         
         const body = await response.text();
