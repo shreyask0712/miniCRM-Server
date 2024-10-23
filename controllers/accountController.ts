@@ -22,6 +22,7 @@ interface ParamsWithId {
 
 export async function listAccounts(req: FastifyRequest<{ Body: AccountRequestBody }>, reply: FastifyReply) {
     const { sessionId, serverUrl } = req.body;
+    console.log("req body: ",req.body);
     const context = { sessionId, serverUrl };
 
     try {
@@ -53,10 +54,15 @@ export async function createAccount(req: FastifyRequest<{ Body: AccountRequestBo
 }
 
 export async function updateAccount(req: FastifyRequest<{ Body: AccountRequestBody & AccountData, Params: ParamsWithId }>, res: FastifyReply) {
-    const { sessionId, serverUrl, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, Website } = req.body;
+    const { sessionId, serverUrl, account } = req.body;
     const { id } = req.params;
     const context = { sessionId, serverUrl };
-    const accountData = { Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, Website };
+    const accountData = { Name: account.Name,
+        BillingStreet: account.BillingStreet,
+        BillingCity: account.BillingCity,
+        BillingState: account.BillingState,
+        BillingPostalCode: account.BillingPostalCode,
+        Website: account.Website };
 
     try {
         const updatedAccount = await update(context, accountData, id);

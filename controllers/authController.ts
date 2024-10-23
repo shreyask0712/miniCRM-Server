@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 import { config } from "dotenv";
 config();
 
-console.log("Check: ",process.env.DB);
 
 const pool = new Pool({
     connectionString: process.env.DB

@@ -10,6 +10,7 @@ dotenv.config();
 
 const app = fastify({logger:true});
 
+
 app.register(authRoutes, {prefix: '/auth'});
 app.register(accountRoutes, {prefix: '/accounts'});
 app.register(contactRoutes, {prefix: '/contacts'});

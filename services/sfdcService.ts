@@ -19,7 +19,7 @@ function getHttpClient(context: Context) {
 export async function query(context: Context, soql: string): Promise<HttpResp> {
     const httpClient = getHttpClient(context);
     const req: HttpReq = {
-        path: '/services/data/62.0/query',
+        path: '/services/data/v62.0/query',
         query: {q:soql}
     };
     return await httpClient.send(req);
