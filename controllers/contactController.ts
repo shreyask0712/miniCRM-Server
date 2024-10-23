@@ -7,6 +7,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 interface ContactRequestBody {
     sessionId: string;
     serverUrl: string;
+    contact: any;
 }
 
 interface ContactData {
@@ -32,9 +33,14 @@ export async function listContacts(req: FastifyRequest<{Body: ContactRequestBody
 }
 
 export async function createContacts(req: FastifyRequest<{Body: ContactRequestBody & ContactData}>, res: FastifyReply) {
-    const {sessionId, serverUrl, ...ContactData} = req.body;
+    const {sessionId, serverUrl, contact} = req.body;
     const context = {sessionId, serverUrl};
-
+    const ContactData = {
+        FirstName: contact.FirstName,
+        LastName: contact.LastName,
+        Email: contact.Email,
+        AccountId: contact.AccountId
+    }
     try {
         const result = await create(context, ContactData);
         return res.send(result);
@@ -44,9 +50,15 @@ export async function createContacts(req: FastifyRequest<{Body: ContactRequestBo
 }
 
 export async function updateContacts(req: FastifyRequest<{Body: ContactData & ContactRequestBody,Params: ParamsWithId}>, res: FastifyReply) {
-    const {sessionId, serverUrl, ...ContactData} = req.body;
+    const {sessionId, serverUrl, contact} = req.body;
     const id = req.params.id;
     const context = {sessionId, serverUrl};
+    const ContactData = {
+        FirstName: contact.FirstName,
+        LastName: contact.LastName,
+        Email: contact.Email,
+        AccountId: contact.AccountId
+    }
 
     try {
         const result = await update(context, ContactData, id);
@@ -58,7 +70,7 @@ export async function updateContacts(req: FastifyRequest<{Body: ContactData & Co
 
 export async function deleteContacts(req: FastifyRequest<{Body: ContactRequestBody,Params: ParamsWithId}>, res: FastifyReply) {
     const {sessionId, serverUrl} = req.body;
-    const id= req.params.id;
+    const {id}= req.params;
     const context = {sessionId, serverUrl};
 
     try {
