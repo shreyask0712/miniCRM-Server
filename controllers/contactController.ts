@@ -51,7 +51,7 @@ export async function createContacts(req: FastifyRequest<{Body: ContactRequestBo
 
 export async function updateContacts(req: FastifyRequest<{Body: ContactData & ContactRequestBody,Params: ParamsWithId}>, res: FastifyReply) {
     const {sessionId, serverUrl, contact} = req.body;
-    const id = req.params.id;
+    const {id} = req.params;
     const context = {sessionId, serverUrl};
     const ContactData = {
         FirstName: contact.FirstName,

@@ -4,6 +4,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 interface OpportunityReqBody {
     sessionId: string;
     serverUrl: string;
+    opportunity: any;
 }
 
 interface OpportunityData {
@@ -25,8 +26,14 @@ export async function listOpportunities(req: FastifyRequest<{Body: OpportunityRe
 }
 
 export async function createOpportunities(req: FastifyRequest<{Body: OpportunityData &  OpportunityReqBody}>, res: FastifyReply) {
-    const {sessionId, serverUrl, ...OpportunityData} = req.body;
+    const {sessionId, serverUrl, opportunity} = req.body;
     const context = {sessionId, serverUrl};
+    const OpportunityData = {
+        Name: opportunity.Name,
+        StageName: opportunity.StageName,
+        Amount: opportunity.Amount,
+        AccountId: opportunity.AccountId
+    }
 
     try {
         const result = await create(context, OpportunityData);
@@ -37,9 +44,15 @@ export async function createOpportunities(req: FastifyRequest<{Body: Opportunity
 }
 
 export async function updateOpportunities(req: FastifyRequest<{Body: OpportunityReqBody & OpportunityData, Params: ParamsWithId}>, res: FastifyReply) {
-    const {sessionId, serverUrl, ...OpportunityData} = req.body;
-    const id = req.params.id;
+    const {sessionId, serverUrl, opportunity} = req.body;
+    const {id} = req.params;
     const context = {sessionId, serverUrl};
+    const OpportunityData = {
+        Name: opportunity.Name,
+        StageName: opportunity.StageName,
+        Amount: opportunity.Amount,
+        AccountId: opportunity.AccountId
+    }
 
     try {
         const result = await update(context, OpportunityData, id);
@@ -51,7 +64,7 @@ export async function updateOpportunities(req: FastifyRequest<{Body: Opportunity
 
 export async function deleteOpportunity(req: FastifyRequest<{Body: OpportunityReqBody,Params: ParamsWithId}>, res: FastifyReply) {
     const {sessionId, serverUrl} = req.body;
-    const id = req.params.id;
+    const {id} = req.params;
     const context = {sessionId, serverUrl};
 
     try {
