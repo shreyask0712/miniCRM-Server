@@ -4,6 +4,7 @@ import { listAccounts as list, createAccounts as create, updateAccounts as updat
 interface AccountRequestBody {
     sessionId: string;
     serverUrl: string;
+    account: any;
 }
 
 interface AccountData {
@@ -32,9 +33,16 @@ export async function listAccounts(req: FastifyRequest<{ Body: AccountRequestBod
 }
 
 export async function createAccount(req: FastifyRequest<{ Body: AccountRequestBody & AccountData }>, res: FastifyReply) {
-    const { sessionId, serverUrl, Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, Website } = req.body;
+    const { sessionId, serverUrl, account } = req.body;
     const context = { sessionId, serverUrl };
-    const accountData = { Name, BillingStreet, BillingCity, BillingState, BillingPostalCode, Website };
+    const accountData = { 
+        Name: account.Name,
+        BillingStreet: account.BillingStreet,
+        BillingCity: account.BillingCity,
+        BillingState: account.BillingState,
+        BillingPostalCode: account.BillingPostalCode,
+        Website: account.Website
+    };
 
     try {
         const newAccount = await create(context, accountData);
